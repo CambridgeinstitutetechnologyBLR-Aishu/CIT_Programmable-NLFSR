@@ -1,9 +1,14 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
-/* This testbench just instantiates the module and makes some convenient wires
-   that can be driven / tested by the cocotb test.py.
+/* For GF180 Gate Level Simulation, we must include the primitive 
+   and cell library definitions so the simulator recognizes the gates.
 */
+`ifdef GL_TEST
+  `include "primitives.v"
+  `include "gf180mcu_fd_sc_mcu7t5v0.v"
+`endif
+
 module tb ();
 
   // Dump the signals to a FST file. You can view it with gtkwave or surfer.
@@ -22,15 +27,15 @@ module tb ();
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+
 `ifdef GL_TEST
   wire VPWR = 1'b1;
   wire VGND = 1'b0;
 `endif
 
-  // Replace tt_um_example with your module name:
+  // Using your specific module name:
   tt_um_cambridge_nlfsr user_project (
 
-      // Include power ports for the Gate Level test:
 `ifdef GL_TEST
       .VPWR(VPWR),
       .VGND(VGND),
