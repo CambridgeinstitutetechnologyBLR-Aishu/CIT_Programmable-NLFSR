@@ -1,24 +1,22 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
-/* For GF180 Gate Level Simulation, we must include the primitive 
-   and cell library definitions so the simulator recognizes the gates.
+/* TinyTapeout Testbench for Programmable NLFSR
+   Note: Library includes (primitives.v, etc.) are handled via 
+   the Makefile COMPILE_ARGS to ensure compatibility with 
+   the GitHub Action environment.
 */
-`ifdef GL_TEST
-  `include "primitives.v"
-  `include "gf180mcu_fd_sc_mcu7t5v0.v"
-`endif
 
 module tb ();
 
-  // Dump the signals to a FST file. You can view it with gtkwave or surfer.
+  // Dump the signals to a FST file for GTKWave/Surfer
   initial begin
     $dumpfile("tb.fst");
     $dumpvars(0, tb);
     #1;
   end
 
-  // Wire up the inputs and outputs:
+  // Wire up the inputs and outputs
   reg clk;
   reg rst_n;
   reg ena;
@@ -33,7 +31,7 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Using your specific module name:
+  // Instantiate the NLFSR module
   tt_um_cambridge_nlfsr user_project (
 
 `ifdef GL_TEST
@@ -45,10 +43,10 @@ module tb ();
       .uo_out (uo_out),   // Dedicated outputs
       .uio_in (uio_in),   // IOs: Input path
       .uio_out(uio_out),  // IOs: Output path
-      .uio_oe (uio_oe),   // IOs: Enable path (active high: 0=input, 1=output)
-      .ena    (ena),      // enable - goes high when design is selected
+      .uio_oe (uio_oe),   // IOs: Enable path
+      .ena    (ena),      // enable
       .clk    (clk),      // clock
-      .rst_n  (rst_n)     // not reset
+      .rst_n  (rst_n)     // reset_n (active low)
   );
 
 endmodule
