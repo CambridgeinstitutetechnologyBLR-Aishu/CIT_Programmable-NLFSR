@@ -24,12 +24,8 @@ COMPILE_ARGS    += -DUSE_POWER_PINS
 COMPILE_ARGS    += -DSIM
 COMPILE_ARGS    += -DUNIT_DELAY=\#1
 
-# --- FIXED PATHS FOR GL_TEST ---
-VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
-VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
-# -------------------------------
-
-# this gets copied in by the GDS action workflow
+# Remove the PDK path lines entirely. 
+# The GL netlist and the testbench are all that should be listed here.
 VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
 endif
